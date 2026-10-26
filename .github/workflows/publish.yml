@@ -31,7 +31,7 @@ jobs:
             arch: arm64
             platform: linux
 
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ (matrix.os) == 'macos-latest' && fromJSON('[\"self-hosted\",\"macOS\",\"ARM64\"]') || (matrix.os) == 'ubuntu-latest' && fromJSON('[\"self-hosted\",\"linux\",\"x64\"]') || (matrix.os) }}"
     steps:
       - uses: actions/checkout@v6
 
@@ -72,7 +72,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
   checksums:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: bundles
     steps:
       - uses: actions/checkout@v6
@@ -95,7 +95,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
   update-homebrew:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     needs: checksums
     steps:
       - uses: actions/checkout@v6
@@ -266,7 +266,7 @@ jobs:
           git push
 
   npm-publish:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
     steps:
       - uses: actions/checkout@v6
 
